@@ -9,5 +9,9 @@ LV1.
 ![img.png](img.png) ![img_1.png](img_1.png)
 4. 테스트: 예외가 발생하는 테스트에 isOk로 작성하여 200을 예측하였으나 400이 돌아와 실패하였음
 ```
-.andExpect(status().isOk())
+//이 부분을 수정해야 한다
+.andExpect(status().isOk()) 
 ```
+5. aop @Before로 수정
+- 로그 확인
+![img_2.png](img_2.png)
