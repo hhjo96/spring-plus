@@ -15,3 +15,11 @@ LV1.
 5. aop @Before로 수정
 - 로그 확인
 ![img_2.png](img_2.png)
+
+### Lv2.
+1. CascadeType.ALL
+- CascadeType.persist: 부모 저장시 자식도 같이 저장
+- all: 저장, 병합, 삭제 등을 다같이
+- 따라서 all로 작성하였다. 
+- manager 잘 저장됨을 확인
+![img_3.png](img_3.png)
