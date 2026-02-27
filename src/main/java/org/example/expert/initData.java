@@ -3,6 +3,8 @@ package org.example.expert;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.example.expert.config.PasswordEncoder;
+import org.example.expert.domain.comment.entity.Comment;
+import org.example.expert.domain.comment.repository.CommentRepository;
 import org.example.expert.domain.todo.entity.Todo;
 import org.example.expert.domain.todo.repository.TodoRepository;
 import org.example.expert.domain.user.entity.User;
@@ -17,6 +19,7 @@ public class initData {
     private final TodoRepository todoRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
+    private final CommentRepository commentRepository;
 
     @PostConstruct
     @Transactional
@@ -35,6 +38,10 @@ public class initData {
         todoRepository.save(todo1);
         todoRepository.save(todo2);
 
+        Comment comment1 = new Comment("댓글1", alice, todo1);
+        Comment comment2 = new Comment("댓글2", alice, todo2);
 
+        commentRepository.save(comment1);
+        commentRepository.save(comment2);
     }
 }

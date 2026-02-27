@@ -1,6 +1,7 @@
 package org.example.expert.domain.todo.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.example.expert.client.WeatherClient;
 import org.example.expert.domain.common.dto.AuthUser;
 import org.example.expert.domain.common.exception.InvalidRequestException;
@@ -24,6 +25,7 @@ import java.time.LocalTime;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class TodoService {
 
     private final TodoRepository todoRepository;
@@ -82,11 +84,13 @@ public class TodoService {
 
     @Transactional(readOnly = true)
     public TodoResponse getTodo(long todoId) {
-        Todo todo = todoRepository.findByIdWithUser(todoId)
-                .orElseThrow(() -> new InvalidRequestException("Todo not found"));
 
+        Todo todo = todoRepository.findByIdWithUserDsl(todoId);
+        if(todo == null) {
+            throw new InvalidRequestException("todo가 없음");
+        }
+        log.info("query dsl 로 적용하였음");
         User user = todo.getUser();
-
         return new TodoResponse(
                 todo.getId(),
                 todo.getTitle(),

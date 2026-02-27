@@ -23,3 +23,15 @@ LV1.
 - 따라서 all로 작성하였다. 
 - manager 잘 저장됨을 확인
 ![img_3.png](img_3.png)
+
+2. N+1
+- 레포지토리에 fetch join을 사용하여 수정하였다
+
+  | 구분 | 이미지 |
+  |------|--------|
+  | 기존 | ![기존 이미지](img_4.png) |
+  | 수정 | ![수정 이미지](img_5.png) |
+
+
+3. queryDSL
+- findIdWithUserDsl 함수를 추가하였다.
