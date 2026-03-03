@@ -15,3 +15,23 @@ LV1.
 5. aop @Before로 수정
 - 로그 확인
 ![img_2.png](img_2.png)
+
+### Lv2.
+1. CascadeType.ALL
+- CascadeType.persist: 부모 저장시 자식도 같이 저장
+- all: 저장, 병합, 삭제 등을 다같이
+- 따라서 all로 작성하였다. 
+- manager 잘 저장됨을 확인
+![img_3.png](img_3.png)
+
+2. N+1
+- 레포지토리에 fetch join을 사용하여 수정하였다
+
+  | 구분 | 이미지 |
+  |------|--------|
+  | 기존 | ![기존 이미지](img_4.png) |
+  | 수정 | ![수정 이미지](img_5.png) |
+
+
+3. queryDSL
+- findIdWithUserDsl 함수를 추가하였다.
