@@ -2,6 +2,7 @@ package org.example.expert.domain.manager.service;
 
 import lombok.RequiredArgsConstructor;
 import org.example.expert.domain.common.dto.AuthUser;
+import org.example.expert.domain.common.enums.LogStatus;
 import org.example.expert.domain.common.exception.InvalidRequestException;
 import org.example.expert.domain.manager.dto.request.ManagerSaveRequest;
 import org.example.expert.domain.manager.dto.response.ManagerResponse;
@@ -28,9 +29,11 @@ public class ManagerService {
     private final ManagerRepository managerRepository;
     private final UserRepository userRepository;
     private final TodoRepository todoRepository;
+    private final ManagerRegisterLogService logService;
 
     @Transactional
     public ManagerSaveResponse saveManager(AuthUser authUser, long todoId, ManagerSaveRequest managerSaveRequest) {
+        try {
         // 일정을 만든 유저
         User user = User.fromAuthUser(authUser);
         Todo todo = todoRepository.findById(todoId)
@@ -46,14 +49,18 @@ public class ManagerService {
         if (ObjectUtils.nullSafeEquals(user.getId(), managerUser.getId())) {
             throw new InvalidRequestException("일정 작성자는 본인을 담당자로 등록할 수 없습니다.");
         }
+            Manager newManagerUser = new Manager(managerUser, todo);
+            Manager savedManagerUser = managerRepository.save(newManagerUser);
+            logService.saveLog(LogStatus.SUCCESS, "매니저 등록 성공", todo.getId(), savedManagerUser.getId());
 
-        Manager newManagerUser = new Manager(managerUser, todo);
-        Manager savedManagerUser = managerRepository.save(newManagerUser);
-
-        return new ManagerSaveResponse(
-                savedManagerUser.getId(),
-                new UserResponse(managerUser.getId(), managerUser.getEmail())
-        );
+            return new ManagerSaveResponse(
+                    savedManagerUser.getId(),
+                    new UserResponse(managerUser.getId(), managerUser.getEmail())
+            );
+        } catch(Exception e) {
+            logService.saveLog(LogStatus.FAIL, e.getMessage(), todoId, managerSaveRequest.getManagerUserId());
+            throw e;
+        }
     }
 
     public List<ManagerResponse> getManagers(long todoId) {
