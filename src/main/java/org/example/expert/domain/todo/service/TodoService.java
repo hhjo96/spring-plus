@@ -6,8 +6,10 @@ import org.example.expert.client.WeatherClient;
 import org.example.expert.domain.common.dto.AuthUser;
 import org.example.expert.domain.common.exception.InvalidRequestException;
 import org.example.expert.domain.todo.dto.request.TodoSaveRequest;
+import org.example.expert.domain.todo.dto.request.TodoSearchRequest;
 import org.example.expert.domain.todo.dto.response.TodoResponse;
 import org.example.expert.domain.todo.dto.response.TodoSaveResponse;
+import org.example.expert.domain.todo.dto.response.TodoSearchResponse;
 import org.example.expert.domain.todo.entity.Todo;
 import org.example.expert.domain.todo.repository.TodoRepository;
 import org.example.expert.domain.user.dto.response.UserResponse;
@@ -63,10 +65,10 @@ public class TodoService {
         //수정일이 범위 검색이므로 시작일과 종료일을 string으로 세팅하고, localdatetime으로 변환하기
         LocalDateTime modifiedStartL = null;
         LocalDateTime modifiedEndL = null;
-        if(modifiedStart != null) {
+        if(modifiedStart != null && !modifiedStart.isBlank()) {
             modifiedStartL = LocalDate.parse(modifiedStart).atStartOfDay();
         }
-        if (modifiedEnd != null) {
+        if (modifiedEnd != null && !modifiedEnd.isBlank()) {
             modifiedEndL = LocalDate.parse(modifiedEnd).atTime(LocalTime.MAX);
         }
 
@@ -101,5 +103,32 @@ public class TodoService {
                 todo.getCreatedAt(),
                 todo.getModifiedAt()
         );
+    }
+
+    public Page<TodoSearchResponse> getTodosWithD(
+            int page, int size, TodoSearchRequest request) {
+        Pageable pageable = PageRequest.of(page - 1, size);
+
+        //시작일이 범위 검색이므로 시작일과 종료일을 string으로 세팅하고, localdatetime으로 변환하기
+        LocalDateTime createdStartL = null;
+        LocalDateTime createdEndL = null;
+        if(request.getCreatedStart() != null && !request.getCreatedStart().isBlank()) {
+            createdStartL = LocalDate.parse(request.getCreatedStart()).atStartOfDay();
+        }
+        if (request.getCreatedEnd() != null && !request.getCreatedEnd().isBlank()) {
+            createdEndL = LocalDate.parse(request.getCreatedEnd()).atTime(LocalTime.MAX);
+        }
+
+        Page<TodoSearchResponse> todos = todoRepository.findAllByD(request.getTitle(), createdStartL, createdEndL, request.getNickname(), pageable);
+
+        return todos.map(todo -> new TodoSearchResponse(
+                todo.getId(),
+                todo.getTitle(),
+                todo.getCreatedAt(),
+                todo.getManagerSize(),
+                todo.getCommentSize()
+
+
+        ));
     }
 }
