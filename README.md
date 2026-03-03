@@ -58,7 +58,17 @@ LV1.
 ![img_11.png](images/img_11.png) ![img_12.png](images/img_12.png) ![img_13.png](images/img_13.png)
 
 4. 대용량 데이터
-- 데이터 생성 완료(2분21초 소요)
+- 데이터 생성 완료
 ![img.png](img16.png)
 - 기본 상태: 4.42초
 ![img.png](img17.png)
+- 인덱스 생성 후: 0.236초
+![img.png](img18.png) ![img_1.png](img_19.png)
+- dto projection으로 id email만 가져오게 함: 0.272초
+![img.png](img19.png)
+- 커버링 인덱스 만들기: 0.247초
+```
+CREATE INDEX idx_nickname_cover
+  ON users (nickname, id, email);
+```
+![img.png](img20.png)
