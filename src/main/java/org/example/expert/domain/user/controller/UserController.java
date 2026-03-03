@@ -26,4 +26,10 @@ public class UserController {
     public void changePassword(@AuthenticationPrincipal AuthUser authUser, @RequestBody UserChangePasswordRequest userChangePasswordRequest) {
         userService.changePassword(authUser.getId(), userChangePasswordRequest);
     }
+
+    @GetMapping("/users/nickname/{nickname}")
+    public ResponseEntity<UserResponse> getUserBig(@PathVariable String nickname) {
+
+        return ResponseEntity.ok(userService.getUserBig(nickname));
+    }
 }
