@@ -37,12 +37,17 @@ public class initData {
 
         Todo todo1 = new Todo("제목2", "내용2", "Sunny", admin);
         Todo todo2 = new Todo("제목3", "내용3", "cool", alice);
+        Todo todo3 = new Todo("제목4", "내용4", "windy", bob);
 
         todoRepository.save(todo1);
         todoRepository.save(todo2);
+        todoRepository.save(todo3);
+
 
         Comment comment1 = new Comment("댓글1", alice, todo1);
         Comment comment2 = new Comment("댓글2", alice, todo2);
+        Comment comment3 = new Comment("댓글3", alice, todo2);
+
 
         commentRepository.save(comment1);
         commentRepository.save(comment2);
