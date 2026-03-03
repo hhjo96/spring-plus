@@ -35,3 +35,13 @@ LV1.
 
 3. queryDSL
 - findIdWithUserDsl 함수를 추가하였다.
+
+4. 스프링 시큐리티
+- security 패키지 아래 내용과 config 폴더 아래 securityConfig 를 추가하였다.
+- 유저로 로그인한 결과 역할바꾸기 안됨
+![img_6.png](img_6.png)
+- 비밀번호 바꾸기도 잘 동작함
+![img_7.png](img_7.png)
+- 관리자로 로그인한 결과 역할바꾸기 가능
+![img_9.png](img_9.png)
+![img_8.png](img_8.png)
