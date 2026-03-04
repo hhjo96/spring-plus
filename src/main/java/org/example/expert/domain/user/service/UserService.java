@@ -19,6 +19,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final UserCacheService cacheService;
 
     public UserResponse getUser(long userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new InvalidRequestException("User not found"));
@@ -53,7 +54,14 @@ public class UserService {
     }
 
     public UserResponse getUserBig(String nickname) {
-        User user = userRepository.findByNickname(nickname).orElseThrow(() -> new InvalidRequestException("User not found"));
-        return new UserResponse(user.getId(), user.getEmail());
+
+        UserResponse cached = cacheService.getNicknameCache(nickname);
+        if(cached != null) {
+            return cached;
+        }
+        cached = userRepository.findByNickname(nickname).orElseThrow(() -> new InvalidRequestException("User not found"));
+        cacheService.saveNicknameCache(nickname, cached);
+
+        return cached;
     }
 }
