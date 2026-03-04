@@ -57,18 +57,25 @@ LV1.
 - 아래와 같이 매니저 등록은 실패하였으나 로그는 남았음
 ![img_11.png](images/img_11.png) ![img_12.png](images/img_12.png) ![img_13.png](images/img_13.png)
 
-4. 대용량 데이터
+4. 대용량 데이터 검색시간 단축시키기
 - 데이터 생성 완료
-![img.png](img16.png)
+![img.png](images/img23.png)
 - 기본 상태: 4.42초
-![img.png](img17.png)
+![img.png](images/img17.png)
 - 인덱스 생성 후: 0.236초
-![img.png](img18.png) ![img_1.png](img_19.png)
+![img.png](images/img18.png) ![img_1.png](images/img_19.png)
 - dto projection으로 id email만 가져오게 함: 0.272초
-![img.png](img19.png)
+![img.png](images/img19.png)
 - 커버링 인덱스 만들기: 0.247초
 ```
 CREATE INDEX idx_nickname_cover
   ON users (nickname, id, email);
 ```
-![img.png](img20.png)
+![img.png](images/img20.png)
+> explain으로 확인결과 복합 인덱스를 사용하지 않음. 찾는 대상이 1개이므로 복합 인덱스는 효과가 없는 것으로 생각됨
+
+- 레디스 적용하기
+ 첫 조회시: 0.351초
+![img.png](images/img21.png)
+ 두번째 조회시: 0.11초
+![img.png](images/img22.png)
